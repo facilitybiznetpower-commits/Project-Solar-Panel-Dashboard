@@ -107,7 +107,8 @@ tbody tr:hover{background:#f8fafc}
     <button class="nav-item" data-tab="survey">📍 <span>Site Survey</span></button>
     <button class="nav-item" data-tab="instalasi">⚡ <span>Instalasi</span></button>
     <button class="nav-item" data-tab="prpo">🧾 <span>PR / PO</span></button>
-    <button class="nav-item" data-tab="budget">💰 <span>Budget</span></button>
+    <!--<button class="nav-item" data-tab="budget">💰 <span>Budget</span></button>-->
+    <button class="nav-item" data-tab="peta">🗺️ <span>Mapping Plan</span></button>
     <button class="nav-item" data-tab="material">📦 <span>Material & Tools</span></button>
   </nav>
   <div class="side-foot" id="sideFoot">Sumber: <b>Apps Script Web App</b><br>Spreadsheet privat</div>
@@ -202,6 +203,16 @@ tbody tr:hover{background:#f8fafc}
       <div class="tbl-wrap"><table><thead><tr><th>Branch</th><th>Tanggal Install</th><th>No. PO</th><th>Jumlah Item</th><th>Stok</th></tr></thead><tbody id="stockBody"></tbody></table></div>
     </div>
   </section>
+    <section id="view-peta" class="view">
+  <div class="card" style="margin-top:0">
+    <h3>🗺️ Mapping Plan Project</h3>
+    <div class="sub">Google My Maps — klik pin untuk detail lokasi</div>
+    <div style="border:1px solid var(--line);border-radius:11px;overflow:hidden">
+      <iframe src="https://www.google.com/maps/d/embed?mid=1TyZB7jJyun6T4jTo3STOK0E2uIau9Ik&hl=en&ll=-7.6605%2C112.091&z=9"
+              width="100%" height="620" style="border:0;display:block" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
 
   </div>
 </main>
@@ -551,7 +562,7 @@ function loadAll(){
 }
 
 /* ============ TABS & BOOT ============ */
-var TITLES={overview:"Overview",survey:"Site Survey",instalasi:"Progress Instalasi",prpo:"PR / PO Tracking",budget:"Budget",material:"Material & Tools"};
+var TITLES={overview:"Overview",survey:"Site Survey",instalasi:"Progress Instalasi",prpo:"PR / PO Tracking",budget:"Budget",material:"Material & Tools",peta:"Mapping Plan"};
 var chartInit={overview:initOverviewCharts,prpo:initPrpoCharts,budget:initBudgetChart,material:initToolsChart};
 var made={},currentTab="overview";
 function renderAll(){
