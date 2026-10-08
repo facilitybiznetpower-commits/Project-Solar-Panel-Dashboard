@@ -136,10 +136,6 @@ tbody tr:hover{background:#f8fafc}
       <div class="card"><h3>Jenis Atap</h3><div class="sub">Distribusi hasil survey</div><div class="ch" style="height:270px"><canvas id="chRoof"></canvas></div></div>
       <div class="card"><h3>Kesiapan Kelistrikan (MCB & Terminal Block)</h3><div class="sub">Siap vs perlu penambahan</div><div class="ch" style="height:270px"><canvas id="chMcb"></canvas></div></div>
     </div>
-   < div class="grid2">
-      <div class="card"><h3>⚠️ Highlight & Perhatian</h3><div class="sub">Dihitung otomatis dari data terbaru</div><div id="hlList"></div></div>
-      <div class="card"><h3>🧾 Ringkasan PR / PO</h3><div class="sub">Realtime dari spreadsheet</div><div id="ovPrpo"></div></div>
-  </div>
   </section>
 
   <section id="view-survey" class="view">
@@ -325,18 +321,7 @@ function buildKPIs(){
     kpiHTML("🏗️","ic-p","Plan Vendor",VENDOR.length,"lokasi penugasan tim vendor")+
     kpiHTML("🧾","ic-t","PR Selesai",prpoDoneA.length+" / "+PRPO.length,"nilai "+rpShort(valDone));
 }
-function buildHighlights(){
-  el("hlList").innerHTML=[
-    ["🔌","Terminal block belum tersedia di <b>"+tbNo+" lokasi</b>; MCB IN PLN perlu penambahan di <b>"+mcbPlnNo+" lokasi</b>; MCB IN ATS di <b>"+mcbAtsNo+" lokasi</b>."],
-    ["🛠️","Total tools kurang <b>"+toolsKurang+" unit</b> — cek halaman Material & Tools."],
-    ["✅","PR selesai <b>"+prpoDoneA.length+" dari "+PRPO.length+"</b> (nilai "+fmtRp(valDone)+"); "+prpoPendA.length+" PR pending approval/release PO ("+fmtRp(valPend)+")."],
-    ["📝","Update progress instalasi kini bisa langsung dari dashboard — klik ✏️ di halaman Instalasi."]
-  ].map(function(h){return '<div class="hl"><span>'+h[0]+'</span><span>'+h[1]+'</span></div>'}).join("");
-  el("ovPrpo").innerHTML=
-    '<div class="stat-line"><span>Total PR / PO</span><b>'+PRPO.length+' dokumen</b></div>'+
-    '<div class="stat-line"><span>Selesai (DONE)</span><b>'+prpoDoneA.length+' · '+fmtRp(valDone)+'</b></div>'+
-    '<div class="stat-line"><span>Pending approval / release PO</span><b>'+prpoPendA.length+' · '+fmtRp(valPend)+'</b></div>';
-}
+
 
 /* ============ CHARTS ============ */
 var charts={},hasChart=(typeof Chart!=="undefined");
