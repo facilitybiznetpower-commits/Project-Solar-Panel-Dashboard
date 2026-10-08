@@ -136,10 +136,10 @@ tbody tr:hover{background:#f8fafc}
       <div class="card"><h3>Jenis Atap</h3><div class="sub">Distribusi hasil survey</div><div class="ch" style="height:270px"><canvas id="chRoof"></canvas></div></div>
       <div class="card"><h3>Kesiapan Kelistrikan (MCB & Terminal Block)</h3><div class="sub">Siap vs perlu penambahan</div><div class="ch" style="height:270px"><canvas id="chMcb"></canvas></div></div>
     </div>
-   <!-- div class="grid2">
+   < div class="grid2">
       <div class="card"><h3>⚠️ Highlight & Perhatian</h3><div class="sub">Dihitung otomatis dari data terbaru</div><div id="hlList"></div></div>
       <div class="card"><h3>🧾 Ringkasan PR / PO</h3><div class="sub">Realtime dari spreadsheet</div><div id="ovPrpo"></div></div>
-  </div-->
+  </div>
   </section>
 
   <section id="view-survey" class="view">
@@ -241,7 +241,7 @@ var CONFIG={
   refreshMinutes:5
 };
 
-/* ============ HELPERS ============ 
+/* ============ HELPERS ============ */
 var el=function(id){return document.getElementById(id)};
 function fmtRp(n){return "Rp "+Math.round(n||0).toLocaleString("id-ID")}
 function fmtN(n){return (n||0).toLocaleString("id-ID")}
@@ -252,7 +252,7 @@ function roofCat(r){if(!r||r==="-")return "N/A";var s=r.toLowerCase(),m=[];if(s.
 var ST_CLS={"DONE":"b-done","CANCEL":"b-cancel","REJECT":"b-reject","VP FC PRJ":"b-vp","WAITING RELEASE PO":"b-wait","SM SALES":"b-sm","PROC":"b-proc"};
 function stBadge(st){return '<span class="badge '+(ST_CLS[st]||"b-plan")+'">'+esc(st||"-")+'</span>'}
 function badgeCls(st){return st==="Done"?"b-done":st==="On Progress"?"b-prog":st==="Preparation"?"b-prep":"b-plan"}
-function pbarColor(st){return st==="Done"?"#10b981":st==="On Progress"?"#f59e0b":st==="Preparation"?"#3b82f6":"#94a3b8"} */
+function pbarColor(st){return st==="Done"?"#10b981":st==="On Progress"?"#f59e0b":st==="Preparation"?"#3b82f6":"#94a3b8"} 
 
 /* ============ DATA FALLBACK RINGKAS (dipakai hanya jika API gagal) ============ */
 var SITES_F=[
