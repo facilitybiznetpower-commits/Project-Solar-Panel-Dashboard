@@ -552,7 +552,7 @@ var chartInit={overview:initOverviewCharts,prpo:initPrpoCharts,budget:initBudget
 var made={},currentTab="overview";
 function renderAll(){
   destroyCharts();
-  buildKPIs();buildHighlights();buildSurvey();buildInstalasi();buildPRPO();buildBudget();buildMaterial();
+  buildKPIs();buildSurvey();buildInstalasi();buildPRPO();buildBudget();buildMaterial();
   if(chartInit[currentTab]){made[currentTab]=true;chartInit[currentTab]()}
 }
 function show(tab){
