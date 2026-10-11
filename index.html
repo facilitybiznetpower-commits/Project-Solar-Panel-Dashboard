@@ -226,15 +226,7 @@ tbody tr:hover{background:#f8fafc}
   </div>
 </div>
 
-    <div id="modalDoc" onclick="if(event.target===this)this.style.display='none'"
-     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:99;">
-  <div style="background:#fff; max-width:600px; margin:5vh auto; padding:16px; border-radius:12px; text-align:center;">
-    <h3 id="docTitle" style="margin:0 0 10px;"></h3>
-    <img id="docImg" src="" style="width:100%; border-radius:8px;">
-    <br><button onclick="el('modalDoc').style.display='none'"
-        style="margin-top:12px; border:0; background:#f1f5f9; padding:8px 16px; border-radius:8px; cursor:pointer;">✕ Tutup</button>
-  </div>
-</div>
+
 
 <script>
 /* ================================================================
@@ -398,7 +390,7 @@ function buildInstalasi(){
   el("intList").innerHTML=items.map(function(t){
     return '<div class="trow"><div class="trow-top"><div><div class="tname">'+esc(t.nm)+'</div><div class="tmeta">'+esc(t.pic)+'</div></div>'
       +'<span style="display:flex;gap:6px;align-items:center"><span class="badge '+badgeCls(t.st)+'">'+esc(t.st)+'</span>'
-      +'<button class="dbtn" data-b="'+encodeURIComponent(t.nm)+'" onclick="openDoc(decodeURIComponent(this.dataset.b))" title="Lihat dokumentasi">📷</button>'</span></div>'
+      +'<button class="ebtn" data-b="'+encodeURIComponent(t.nm)+'" data-p="'+t.prog+'" data-s="'+encodeURIComponent(t.st)+'" title="Update progress">✏️</button></span></div>'
       +'<div class="pg-line"><div class="pbar"><i style="width:'+t.prog+'%;background:'+pbarColor(t.st)+'"></i></div><span>'+t.prog+'%</span></div></div>';
   }).join("");
   var vPrep=VENDOR.filter(function(v){return v[2]>0}).length;
@@ -589,25 +581,7 @@ function show(tab){
   computeAggregates();renderAll();loadAll();
 })();
 
-  // Ganti link dengan link foto kamu (Google Drive / URL lain)
-var FOTO = {
-  "Nganjuk":   "https://drive.google.com/file/d/FILE_ID_1/view",
-  "Madiun":    "https://drive.google.com/file/d/FILE_ID_2/view",
-  "Surabaya Krembangan": "https://drive.google.com/file/d/FILE_ID_3/view"
-};
 
-function openDoc(lokasi){
-  var url = FOTO[lokasi] || "";
-  if(!url){ alert("Belum ada foto untuk " + lokasi); return; }
-
-  // kalau link Google Drive, ubah jadi link gambar langsung
-  var m = url.match(/[-\w]{25,}/);
-  if(url.indexOf("drive.google") > -1 && m) url = "https://drive.google.com/thumbnail?id=" + m[0] + "&sz=w1000";
-
-  el("docTitle").textContent = "📸 " + lokasi;
-  el("docImg").src = url;
-  el("modalDoc").style.display = "block";
-}
 </script>
 
 </body>
