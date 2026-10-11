@@ -111,7 +111,7 @@ tbody tr:hover{background:#f8fafc}
     <button class="nav-item" data-tab="peta">🗺️ <span>Mapping Plan</span></button>
     <button class="nav-item" data-tab="material">📦 <span>Material & Tools</span></button>
   </nav>
-  <div class="side-foot" id="sideFoot">Sumber: <b>Apps Script Web App</b><br>Spreadsheet privat</div>
+  <!--div class="side-foot" id="sideFoot">Sumber: <b>Apps  Web App</b><br>Spreadsheet privat</div-->
 </aside>
 <main class="main">
   <header class="topbar">
@@ -152,10 +152,9 @@ tbody tr:hover{background:#f8fafc}
   </section>
 
   <section id="view-instalasi" class="view">
-    <div class="note" style="margin-top:0">✏️ Klik tombol pensil untuk <b>mengubah progress & status</b> — perubahan langsung tertulis ke spreadsheet (tab ProgTeam Biznet Power).</div>
-    <div class="grid2">
-      <div class="card"><h3>⚡ Tim Biznet Power (Internal)</h3><div class="sub" id="intSub"></div><div class="chips" id="intChips"></div><div class="tlist" id="intList"></div></div>
-      <div class="card"><h3>🏗️ Tim Vendor</h3><div class="sub" id="venSub"></div><div class="chips" id="venChips"></div><div class="tlist" id="venList"></div></div>
+        <div class="grid2">
+      <div class="card"><h3>⚡ Tim Biznet Power (Jatim)</h3><div class="sub" id="intSub"></div><div class="chips" id="intChips"></div><div class="tlist" id="intList"></div></div>
+      <div class="card"><h3>⚡ Tim Biznet Power (Bali)</h3><div class="sub" id="venSub"></div><div class="chips" id="venChips"></div><div class="tlist" id="venList"></div></div>
     </div>
     <div class="card" style="margin-top:14px"><h3>🚚 Delivery Material per Lokasi</h3><div class="sub" id="delSub"></div>
       <div class="tbl-wrap"><table><thead><tr><th>Lokasi</th><th>Material PV</th><th>Mounting</th><th>Box AC/DC</th><th>Inverter & Baterai</th><th>Status</th></tr></thead><tbody id="delBody"></tbody></table></div>
@@ -212,6 +211,7 @@ tbody tr:hover{background:#f8fafc}
   </div>
 </main>
 </div>
+</div>
 
 <!-- Modal edit progress -->
 <div class="modal-bg" id="editModal" style="display:none">
@@ -223,6 +223,16 @@ tbody tr:hover{background:#f8fafc}
     <select id="emSt"><option>Plan</option><option>Preparation</option><option>On Progress</option><option>Done</option></select>
     <div class="m-btns"><button id="emSave">💾 Simpan</button><button id="emCancel">Batal</button></div>
     <div class="m-msg" id="emMsg"></div>
+  </div>
+</div
+<!-- Modal edit View foto -->
+<div id="modalDoc" onclick="if(event.target===this)this.style.display='none'"
+     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:99;">
+  <div style="background:#fff; max-width:900px; margin:5vh auto; padding:16px; border-radius:12px; text-align:center;">
+    <h3 id="docTitle" style="margin:0 0 10px;"></h3>
+    <img id="docImg" src="" style="width:100%; border-radius:8px;">
+    <br><button onclick="el('modalDoc').style.display='none'"
+        style="margin-top:12px; border:0; background:#f1f5f9; padding:8px 16px; border-radius:8px; cursor:pointer;">✕ Tutup</button>
   </div>
 </div>
 
@@ -276,7 +286,7 @@ var SITES_F=[
 {n:21,nm:"Sleman Triharjo",rg:"DIY",pic:"Harlin",inv:"LT 2",pv:9,roof:"Spandek",frame:"CNP",load:"Full Load",pln:1,ats:1,tb:0,team:"-",note:""},
 {n:22,nm:"Bantul Bangunharjo",rg:"DIY",pic:"Harlin",inv:"LT 1",pv:14,roof:"Spandek",frame:"Baja ringan",load:"Full Load",pln:1,ats:1,tb:0,team:"-",note:""}];
 var INTERNAL_F={"Surabaya Krembangan":{pic:"Izzat & Harlin",prog:100,st:"Done"},"Surabaya Karah":{pic:"Izzat & Harlin",prog:100,st:"Done"},"Surabaya Lidah Kulon":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Surabaya Darmo":{pic:"Arofan & Lukman",prog:100,st:"Done"},"Surabaya Sememi":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Gresik Karangturi":{pic:"Arofan & Lukman",prog:100,st:"Done"},"Sidoarjo Jemundo":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Sidoarjo Sukodono":{pic:"Arofan & Lukman",prog:100,st:"Done"},"Batu Temas":{pic:"Izzat & Harlin",prog:100,st:"Done"},"Batu Dadaprejo":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Malang Randuagung":{pic:"Izzat & Harlin",prog:100,st:"Done"},"Malang Dampit":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Pasuruan Pandaan":{pic:"Arofan & Lukman",prog:100,st:"Done"},"Pasuruan Trajeng":{pic:"Izzat & Harlin",prog:100,st:"Done"},"Probolinggo":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Lumajang":{pic:"Arofan & Lukman",prog:100,st:"Done"},"Situbondo":{pic:"Izzat & Harlin",prog:100,st:"Done"},"Bondowoso":{pic:"Rohmandi & Habib",prog:100,st:"Done"},"Malang Bandungrejosari":{pic:"Arofan & Harlin",prog:100,st:"Done"},"Malang Gadingkasri":{pic:"Izzat & Habib",prog:100,st:"Done"},"Jombang":{pic:"Rifanda & Lukman",prog:100,st:"Done"},"Blitar":{pic:"Harlin & Arofan",prog:100,st:"Done"},"Mojokerto":{pic:"Rohmandi & Habib",prog:60,st:"On Progress"},"Tulungagung":{pic:"Izzat & Ari",prog:80,st:"On Progress"},"Nganjuk":{pic:"Rohmandi & Habib",prog:30,st:"Preparation"},"Madiun":{pic:"Rifanda & Lukman",prog:30,st:"Preparation"},"Ngawi":{pic:"Harlin & Arofan",prog:30,st:"Preparation"},"Ponorogo":{pic:"Izzat & Ari",prog:30,st:"Preparation"},"Pacitan":{pic:"Rohmandi & Habib",prog:30,st:"Preparation"}};
-var VENDOR_F=[["Surabaya Sutorejo","Wahyu Faros",3],["Sidoarjo Sawotratap","Wahyu Faros",3],["Tuban","Wahyu Faros",0],["Bojonegoro","Wahyu Faros",0],["Jember","Wahyu Faros",0],["Banyuwangi Klatak","Wahyu Faros",0],["Blitar","Telinco",0],["Tulungagung","Telinco",0],["Trenggalek","Telinco",0],["Ponorogo","Telinco",0],["Madiun","Telinco",0],["Pacitan","Telinco",0],["Ngawi","Telinco",0],["Jombang","Telinco",0],["Mojokerto","Telinco",0],["Nganjuk","Telinco",0],["Lamongan","Telinco",0],["Pasuruan Pandaan","Telinco",0],["Pasuruan Trajeng","Telinco",0],["Lumajang","Telinco",0],["Probolinggo","Telinco",0],["Situbondo","Telinco",0],["Bondowoso","Telinco",0]];
+var VENDOR_F=[  ["Branch Denpasar","Imani & Rifanda",30, "On Progress"],["Branch Tabanan Megati","Rifanda, akbar & kanda lukman", 10, "Preparation"]];
 var DELIVERY_F=[["Surabaya Krembangan","20/05/26","25/05/26","-","19/06/26","DONE"],["Surabaya Karah","20/05/26","25/05/26","-","-","DONE"],["Surabaya Lidah Kulon","20/05/26","25/05/26","-","19/06/26","DONE"],["Batu Dadaprejo","12/06/26","-","-","24/06/26","DONE"],["Batu Temas","12/06/26","-","-","24/06/26","DONE"],["Malang Dampit","-","-","-","03/07/26","DONE"]];
 var TOOLS_F=[["Bor listrik",3,"Techno 2",1],["Bor impact",3,"Rikho 1, Joko 1, Rigging 2",0],["Gerinda",3,"Techno 1",2],["Palu",3,"Techno 1, Joko 1, Rohmad 1",0],["Tang skun",3,"Techno 1",2],["Tang pres",3,"Rohmandi 1",0],["Tang potong",3,"Techno 1, Joko 1",1],["Kabel rol",3,"-",3]];
 var STOCK_F=[["Surabaya Krembangan (261A)","2 Jun 2026","2026056364 · 2026071646",28,0],["Surabaya Lidah Kulon (2620)","2 Jun 2026","2026056403 · 2026071793",28,0],["Batu Dadaprejo (2629)","16 Jun 2026","2026056359 · 2026079098",28,0]];
@@ -390,16 +400,21 @@ function buildInstalasi(){
   el("intList").innerHTML=items.map(function(t){
     return '<div class="trow"><div class="trow-top"><div><div class="tname">'+esc(t.nm)+'</div><div class="tmeta">'+esc(t.pic)+'</div></div>'
       +'<span style="display:flex;gap:6px;align-items:center"><span class="badge '+badgeCls(t.st)+'">'+esc(t.st)+'</span>'
-      +'<button class="ebtn" data-b="'+encodeURIComponent(t.nm)+'" data-p="'+t.prog+'" data-s="'+encodeURIComponent(t.st)+'" title="Update progress">✏️</button></span></div>'
+      +'<button class="dbtn" data-b="'+encodeURIComponent(t.nm)+'" onclick="openDoc(decodeURIComponent(this.dataset.b))" title="Lihat dokumentasi">📷</button></span></div>'
       +'<div class="pg-line"><div class="pbar"><i style="width:'+t.prog+'%;background:'+pbarColor(t.st)+'"></i></div><span>'+t.prog+'%</span></div></div>';
   }).join("");
-  var vPrep=VENDOR.filter(function(v){return v[2]>0}).length;
-  el("venSub").textContent="Penugasan tim vendor";
-  el("venChips").innerHTML='<span class="chip">🏙️ '+VENDOR.length+' lokasi</span><span class="chip" style="background:#dbeafe">🔵 '+vPrep+' Preparation</span>';
-  el("venList").innerHTML=VENDOR.map(function(v){
-    var st=v[2]>0?"Preparation":"Plan";
-    return '<div class="trow"><div class="trow-top"><div><div class="tname">'+esc(v[0])+'</div><div class="tmeta">Vendor: '+esc(v[1])+'</div></div><span class="badge '+badgeCls(st)+'">'+st+'</span></div><div class="pg-line"><div class="pbar"><i style="width:'+v[2]+'%;background:'+pbarColor(st)+'"></i></div><span>'+v[2]+'%</span></div></div>';
-  }).join("");
+  var vDone=0,vProg=0,vPrep=0;
+VENDOR.forEach(function(v){
+  if(v[2]>=100)vDone++;
+  else if(v[2]>0)vProg++;
+  else vPrep++;
+});
+el("venSub").textContent="Fase 2 - Bali";
+el("venChips").innerHTML='<span class="chip">🏙️ '+VENDOR.length+' lokasi</span><span class="chip" style="background:#d1fae5">✅ '+vDone+' Done</span><span class="chip" style="background:#fef3c7">🔄 '+vProg+' On Progress</span><span class="chip" style="background:#dbeafe">🔵 '+vPrep+' Preparation</span>';
+el("venList").innerHTML=VENDOR.map(function(v){
+  var st=v[2]>=100?"Done":v[2]>0?"On Progress":"Preparation";
+  return '<div class="trow"><div class="trow-top"><div><div class="tname">'+esc(v[0])+'</div><div class="tmeta">'+esc(v[1])+'</div></div><span class="badge '+badgeCls(st)+'">'+st+'</span></div><div class="pg-line"><div class="pbar"><i style="width:'+v[2]+'%;background:'+pbarColor(st)+'"></i></div><span>'+v[2]+'%</span></div></div>';
+}).join("");
   var dDone=DELIVERY.filter(function(d){return d[5]==="DONE"}).length;
   el("delSub").textContent=dDone+" dari "+DELIVERY.length+" lokasi: material DONE dikirim";
   el("delBody").innerHTML=DELIVERY.map(function(d){
@@ -501,7 +516,7 @@ function setStatus(type,text){
 function loadAll(){
   if(!CONFIG.webAppUrl||CONFIG.webAppUrl.indexOf("PASTE")>=0){
     setStatus("fallback","🟡 Fallback · Web App URL belum diisi");
-    el("sideFoot").innerHTML="⚠️ Isi <b>CONFIG.webAppUrl</b> dengan URL hasil Deploy Apps Script.";
+   // el("sideFoot").innerHTML="⚠️ Isi <b>CONFIG.webAppUrl</b> dengan URL hasil Deploy Apps Script.";
     return;
   }
   setStatus("loading","⏳ Memuat via Apps Script…");
@@ -530,7 +545,7 @@ function loadAll(){
     }
     if(apiErrors.length===0){
       setStatus("live","🟢 Live: Google Sheets · "+now);
-      el("sideFoot").innerHTML="Sumber: <b>Google Sheets</b> via Apps Script<br>Update: "+now;
+      //el("sideFoot").innerHTML="Sumber: <b>Google Sheets</b> via Apps Script<br>Update: "+now;
       el("errNote").style.display="none";
     }else{
       setStatus("warn","🟠 Sebagian live · "+now);
@@ -539,6 +554,7 @@ function loadAll(){
     }
   })
   .catch(function(err){
+    console.error(err);   // ← TAMBAHKAN INI
     setStatus("fallback","🟡 Fallback · "+err.message);
     el("errNote").style.display="block";
     el("errNote").innerHTML="⚠️ Gagal menghubungi Apps Script: <b>"+esc(err.message)+"</b><br>Cek: URL webAppUrl (akhiran /exec), deployment <i>Execute as: Me</i> & <i>Access: Anyone</i>, token sama.";
@@ -547,6 +563,27 @@ function loadAll(){
     refreshTimer=setInterval(loadAll,CONFIG.refreshMinutes*60000);
 }
 
+// Untuk View foto progress
+var FOTO = {
+  "Jombang":   "https://drive.google.com/file/d/1b5_rsCzB-TRE6zUWyN9b3Dop1udch3X_/view?usp=sharing",
+  "Tulungagung":    "https://drive.google.com/file/d/1S2ql484jxifWLUqkeoK0mCN0d3FyqMOA/view?usp=sharing",
+  "Ngawi":    "https://drive.google.com/file/d/1Ej3opcbr_PuDLwflvMX5-n5gM2YBHHCD/view?usp=sharing",
+};
+
+function openDoc(lokasi){
+  var url = FOTO[lokasi] || "";
+  if(!url){ alert("Belum ada foto untuk " + lokasi); return; }
+
+  // kalau link Google Drive, ubah jadi link gambar langsung
+  var m = url.match(/[-\w]{25,}/);
+  if(url.indexOf("drive.google") > -1 && m) url = "https://drive.google.com/thumbnail?id=" + m[0] + "&sz=w1000";
+
+  el("docTitle").textContent = "📸 " + lokasi;
+  el("docImg").src = url;
+  el("modalDoc").style.display = "block";
+}
+
+  
 /* ============ TABS & BOOT ============ */
 var TITLES={overview:"Overview",survey:"Site Survey",instalasi:"Progress Instalasi",prpo:"PR / PO Tracking",budget:"Budget",material:"Material & Tools",peta:"Mapping Plan"};
 var chartInit={overview:initOverviewCharts,prpo:initPrpoCharts,budget:initBudgetChart,material:initToolsChart};
