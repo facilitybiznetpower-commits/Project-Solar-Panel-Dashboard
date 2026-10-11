@@ -431,8 +431,8 @@ function buildPRPO(){
   el("pVendor").innerHTML='<option value="all">Semua Vendor</option>'+vOpts.map(function(v){return '<option>'+esc(v)+'</option>'}).join("");
   el("prpoChips").innerHTML=
     '<span class="chip">🧾 Total '+PRPO.length+' PR</span>'+
-    '<span class="chip" style="background:#d1fae5">✅ DONE '+prpoDoneA.length+' · '+rpShort(valDone)+'</span>'+
-    '<span class="chip" style="background:#ede9fe">⏳ Pending '+prpoPendA.length+' · '+rpShort(valPend)+'</span>';
+    '<span class="chip" style="background:#d1fae5">✅ DONE '+prpoDoneA.length+'</span>'+
+    '<span class="chip" style="background:#ede9fe">⏳ Pending '+prpoPendA.length+'</span>';
   function render(){
     var q=(el("pSearch").value||"").toLowerCase(),st=el("pStatus").value,vd=el("pVendor").value;
     var rows=PRPO.filter(function(x){
