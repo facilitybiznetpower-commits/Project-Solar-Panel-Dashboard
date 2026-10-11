@@ -413,7 +413,10 @@ el("venSub").textContent="Fase 2 - Bali";
 el("venChips").innerHTML='<span class="chip">🏙️ '+VENDOR.length+' lokasi</span><span class="chip" style="background:#d1fae5">✅ '+vDone+' Done</span><span class="chip" style="background:#fef3c7">🔄 '+vProg+' On Progress</span><span class="chip" style="background:#dbeafe">🔵 '+vPrep+' Preparation</span>';
 el("venList").innerHTML=VENDOR.map(function(v){
   var st=v[2]>=100?"Done":v[2]>0?"On Progress":"Preparation";
-  return '<div class="trow"><div class="trow-top"><div><div class="tname">'+esc(v[0])+'</div><div class="tmeta">'+esc(v[1])+'</div></div><span class="badge '+badgeCls(st)+'">'+st+'</span></div><div class="pg-line"><div class="pbar"><i style="width:'+v[2]+'%;background:'+pbarColor(st)+'"></i></div><span>'+v[2]+'%</span></div></div>';
+  return '<div class="trow"><div class="trow-top"><div><div class="tname">'+esc(v[0])+'</div><div class="tmeta">'+esc(v[1])+'</div></div>'
+    +'<span style="display:flex;gap:6px;align-items:center"><span class="badge '+badgeCls(st)+'">'+esc(st)+'</span>'
+    +'<button class="dbtn" data-b="'+encodeURIComponent(v[0])+'" onclick="openDoc(decodeURIComponent(this.dataset.b))" title="Lihat dokumentasi">📷</button></span></div>'
+    +'<div class="pg-line"><div class="pbar"><i style="width:'+v[2]+'%;background:'+pbarColor(st)+'"></i></div><span>'+v[2]+'%</span></div></div>';
 }).join("");
   var dDone=DELIVERY.filter(function(d){return d[5]==="DONE"}).length;
   el("delSub").textContent=dDone+" dari "+DELIVERY.length+" lokasi: material DONE dikirim";
@@ -568,6 +571,10 @@ var FOTO = {
   "Jombang":   "https://drive.google.com/file/d/1b5_rsCzB-TRE6zUWyN9b3Dop1udch3X_/view?usp=sharing",
   "Tulungagung":    "https://drive.google.com/file/d/1S2ql484jxifWLUqkeoK0mCN0d3FyqMOA/view?usp=sharing",
   "Ngawi":    "https://drive.google.com/file/d/1Ej3opcbr_PuDLwflvMX5-n5gM2YBHHCD/view?usp=sharing",
+  // 🏝️ Bali
+  "Denpasar":   "https://drive.google.com/file/d/XXXXX/view",
+  "Denpasar Sanur": "https://drive.google.com/file/d/1qs52gaQfR4D_gjjfR-J5Vq0dN4cOZIzU/view?usp=sharing",
+  "Badung Kuta": "https://drive.google.com/file/d/1WH8p1lODc4de1SQy78ww-Ow7ePBqvFH0/view?usp=sharing"
 };
 
 function openDoc(lokasi){
