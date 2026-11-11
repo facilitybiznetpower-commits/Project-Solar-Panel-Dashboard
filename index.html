@@ -968,6 +968,8 @@ async function genPDF(r){
     }
     y+=dH+8;doc.setTextColor(30);
   }
+  /* ---- Dokumentasi Foto: SELALU mulai di halaman baru (page 2) ---- */
+  doc.addPage();y=18;
   doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(12,35,64);
   doc.text("Dokumentasi Foto",M,y);y+=2;
   var fw=(W-M*2-8)/2,fh=52;
