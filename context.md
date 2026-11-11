@@ -1,8 +1,8 @@
 # 📋 PROJECT CONTEXT — Dashboard Monitoring PLTS Biznet Power
-*Status: BASE v2.2 — full-stack production (GitHub Pages + Apps Script + Google Sheets)*
+*Status: BASE v2.3.1 — full-stack production (GitHub Pages + Apps Script + Google Sheets)*
 
 ## 🎯 Arsitektur
-- **Frontend**: trial.html — GitHub Pages
+- **Frontend**: index.html — GitHub Pages
   https://facilitybiznetpower-commits.github.io/My-Dev/
 - **Backend**: Google Apps Script Web App — project "Biznet Power API" (file BizNetPowerAPI.gs)
   URL /exec tersimpan di CONFIG.API_URL dalam trial.html
@@ -13,7 +13,7 @@
 - **Foto**: Drive folder "FOTO REPORT" (ID: 1pd3alQl4z9cSJqUtaVhP2fv3CyM6R0cD)
 - **Manifest**: appsscript.json dengan oauthScopes: spreadsheets + drive
 
-## 🖥️ Fitur trial.html (BASE v2.2)
+## 🖥️ Fitur trial.html (BASE v2.3.1)
 - 5 tab: Overview (peta Leaflet Esri + Chart.js), Instalasi (On Progress/Done Live),
   Site Survey, PR/PO, Material & Tools (Delivery/Stok/Tools)
 - 5 kartu Overview COMPACT (padding 6px, angka 18px) agar peta langsung terlihat
@@ -27,15 +27,30 @@
 - Foto 📷 → uploadPhoto (JPEG maks 1600px) → Drive + register tab Photos;
   hapus foto = trash file + hapus baris register
 - Lightbox fullscreen: klik foto terisi → zoom 100vw/100vh, klik/✕ tutup
-- Modal dokumentasi 880px, slot foto 200px
+- Modal dokumentasi 1100px, slot foto 300px (grid 2 kolom, foto ±530×300px)
+- Tombol 📐 Desain (tabel On Progress, SEBELUM kolom 📷) → popup modal sama
+  (1100px) berisi 1 gambar besar (slot foto ke-4 "Desain", tinggi 520px,
+  object-fit:contain agar denah tampil utuh) + info PIC, Plan PV (≈kWp ×0,64),
+  Tapping Load — data otomatis dari tab Survey (tanpa input manual)
+- Slot foto: 0-3 = dokumentasi (Solar Panel/Instalasi/Inverter&Battery/Dashboard),
+  slot 4 = Desain; helper slotLabel() & refreshPhotoView() memisahkan render
+  popup dokumentasi (grid 2x2) vs popup desain (1 slot .ph-grid.single)
+- Slot 4 (Desain) TERVERIFIKASI berfungsi end-to-end TANPA patch .gs:
+  upload ke Drive sukses, tampil di popup, dan ikut di PDF (konfirmasi user)
 - Info PV (pill ☀️): On Progress = "Plan PV: n panel ≈ x kWp" (dari Survey ×0,64),
   Done Live = "PV Terpasang: pcs • kWp | Inverter kVA • Battery kWh"
-- PDF report jsPDF (A4, navy header, data + 4 foto dari Drive via getPhoto base64)
-- RO2REG: RO09/10/11/22=JATIM, BALI 1/2/3=BALI, RO07/08/20/21=JATENG
+- PDF report jsPDF (A4, navy header) via getPhoto base64:
+  • Page 1 = data site + section "Desain Instalasi (Plan)" (PIC, Plan PV = kWp,
+    Tapping Load + gambar desain jika sudah diupload)
+  • Page 2 = "Dokumentasi Foto" SELALU mulai di halaman baru (doc.addPage)
+    berisi 4 foto 2×2 — terverifikasi semua foto muncul di PDF
+- RO2REG: RO09/10/11/22=JATIM, BALI 1/2/3=BALI, RO07/08/20/21=JATENG,
+  RO06 & HOBL=LAINNYA (matchReg default JATENG)
 
 ## ⚙️ Endpoints Apps Script
 - GET  ?action=ping (ada ver:"v2-patch") | getAll | getPhoto&id=FILEID
 - POST {action: saveProgress|saveDelivery|uploadPhoto|deletePhoto, ...}
+  (uploadPhoto/deletePhoto menerima slot 0-4, termasuk slot 4 "Desain")
 - Deploy: Execute as Me • Access Anyone
 - Fungsi diagnostik: setupCheck, testDrive (TANPA try/catch!), testUpload, createPhotosTab
 
@@ -48,10 +63,20 @@
 6. Scope Drive ditambahkan via appsscript.json oauthScopes
 7. Penjumlahan float JS bisa menghasilkan desimal panjang → selalu Math.round
 
+## 🎨 Keputusan Fitur Desain (v2.3)
+- Data desain diambil OTOMATIS dari tab Survey (pilihan user): hanya Plan PV,
+  Tapping Load, dan PIC yang dipakai — tidak ada input manual/simpan ke sheet
+- Kolom "planinverter" di Survey ternyata berisi nomor LANTAI (quirk parser,
+  tampil sebagai kolom "Lantai" di tab Site Survey) → sengaja TIDAK dipakai
+- Gambar desain = upload ke Drive via action uploadPhoto/deletePhoto slot 4
+- ensureSitePhotos memuat slot 0-4 (desain ikut) sebelum PDF digenerate
+- Karakter "≈" tidak didukung font Helvetica jsPDF → di PDF ditulis "="
+
 ## ⚠️ TODO / Keterbatasan
 - [ ] KEAMANAN: API_URL terekspos di repo publik — siapa pun bisa baca/tulis
       spreadsheet. RENCANA: token rahasia di doGet/doPost + CONFIG.TOKEN di HTML
 - [ ] Tab Survey/PRPO/Report/Stock/Tools masih read-only di dashboard
+- [ ] Tombol "📂 Folder Google Drive" di popup masih placeholder alert()
 - [ ] Belum ada: export Excel, timeline tanggal per tahap, log aktivitas
 
 ## 🔄 Cara Pakai File Ini
