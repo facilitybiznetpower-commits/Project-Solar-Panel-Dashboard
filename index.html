@@ -88,6 +88,9 @@ tbody tr:hover{background:#f8fafc}
 .ph.up:hover{border-color:var(--navy);background:#eef2f9}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px}
 .ph .rm{position:absolute;top:4px;right:4px;background:#fff;border:1px solid var(--line);border-radius:6px;width:20px;height:20px;line-height:17px;text-align:center;font-size:11px;color:#b91c1c;z-index:2}
+.ph-grid.single{grid-template-columns:1fr}
+.ph-grid.single .ph{height:520px}
+.ph-grid.single .ph img{object-fit:contain;background:#fff}
 #lightbox{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:250;cursor:zoom-out}
 #lightbox.show{display:flex}
 #lightbox img{max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain}
@@ -205,7 +208,7 @@ window.addEventListener("error",function(e){var b=document.getElementById("errba
   <div id="sub-prog">
     <div class="panel">
       <div class="phrow">
-        <h3>Detail Instalasi — On Progress &amp; Prepare <span class="note">— klik ✏️ untuk edit progres, 📷 untuk dokumentasi</span></h3>
+        <h3>Detail Instalasi — On Progress &amp; Prepare <span class="note">— klik 📐 untuk desain, 📷 untuk dokumentasi, ✏️ untuk edit progres</span></h3>
       </div>
       <div class="countrow" id="cntProg"></div>
       <div class="legend">
@@ -219,7 +222,7 @@ window.addEventListener("error",function(e){var b=document.getElementById("errba
       <div class="tbl-wrap"><table id="tProg">
         <thead><tr><th>No</th><th>Branch</th><th>Regional</th><th>PIC Team</th>
         <th>PR/PO</th><th>Dlv</th><th>Mnt</th><th>Wire</th><th>Comb</th><th>Inv/Batt</th><th>Inter</th><th>Rpt</th>
-        <th>Progress</th><th>Status</th><th>Dokumentasi</th><th>Edit</th></tr></thead><tbody></tbody>
+        <th>Progress</th><th>Status</th><th>Desain</th><th>Dokumentasi</th><th>Edit</th></tr></thead><tbody></tbody>
       </table></div>
     </div>
   </div>
@@ -330,7 +333,7 @@ window.addEventListener("error",function(e){var b=document.getElementById("errba
 
 <div id="toast"></div>
 <div id="lightbox"><div class="lb-close">✕</div><img id="lbImg" alt=""/><div class="lb-cap" id="lbCap"></div></div>
-<!-- MODAL DOKUMENTASI -->
+<!-- MODAL DOKUMENTASI / DESAIN -->
 <div class="modal" id="modal"><div class="box">
   <div style="display:flex;justify-content:space-between;align-items:start">
     <div><h4 id="mTitle"></h4><div class="mchips" id="mChips"></div></div>
@@ -638,14 +641,23 @@ function pvInfo(branch){
   }
   return null;
 }
+/* Baris Survey sebuah site (untuk popup Desain & PDF) */
+function surveyOf(branch){
+  var b=norm(branch);
+  for(var i=0;i<SURVEY.length;i++){if(norm(SURVEY[i][1])===b)return SURVEY[i];}
+  return null;
+}
 var toastTimer=null;
 function toast(msg){
   var t=$("#toast");t.textContent=msg;t.style.display="block";
   clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.style.display="none";},3500);
 }
 
-/* ================= MODAL DOKUMENTASI ================= */
+/* ================= MODAL DOKUMENTASI & DESAIN ================= */
 var PHOTO_LABELS=["Solar Panel Terpasang","Foto Instalasi","Inverter & Battery Terpasang","Dashboard Monitoring"];
+/* Slot 4 = gambar Desain (popup 📐) — tidak masuk grid dokumentasi */
+var DESIGN_SLOT=4,DESIGN_LABEL="Desain";
+function slotLabel(i){return i===DESIGN_SLOT?DESIGN_LABEL:(PHOTO_LABELS[i]||"");}
 /* PHOTOS[branch][slot] = {url:dataURL|null, id:fileId|null, w, h, loading} */
 var PHOTOS={},curKey=null,curMode=null,curSlot=-1;
 
@@ -664,16 +676,17 @@ function loadOnePhoto(branch,slot){
       });
     })
     .catch(function(){})
-    .then(function(){ph.loading=false;if(curKey===branch)renderPhotoSlots();});
+    .then(function(){ph.loading=false;if(curKey===branch)refreshPhotoView();});
   return ph.promise;
 }
 function ensureSitePhotos(branch){
   var st=PHOTOS[branch]||{},jobs=[];
-  PHOTO_LABELS.forEach(function(l,i){if(st[i]&&st[i].id)jobs.push(loadOnePhoto(branch,i));});
+  for(var i=0;i<=DESIGN_SLOT;i++){if(st[i]&&st[i].id)jobs.push(loadOnePhoto(branch,i));}
   return Promise.all(jobs);
 }
 function renderPhotoSlots(){
   if(!curKey)return;
+  $("#mPhotos").classList.remove("single");
   if(!PHOTOS[curKey])PHOTOS[curKey]={};
   var st=PHOTOS[curKey];
   $("#mPhotos").innerHTML=PHOTO_LABELS.map(function(l,i){
@@ -683,6 +696,17 @@ function renderPhotoSlots(){
     return '<div class="ph up" data-i="'+i+'"><b>📷 '+l+"</b><span>klik untuk upload foto</span></div>";
   }).join("");
   PHOTO_LABELS.forEach(function(l,i){var ph=st[i];if(ph&&ph.id&&!ph.url)loadOnePhoto(curKey,i);});
+}
+function refreshPhotoView(){if(curKey){if(curMode==="design")renderDesignSlot();else renderPhotoSlots();}}
+function renderDesignSlot(){
+  if(!curKey)return;
+  if(!PHOTOS[curKey])PHOTOS[curKey]={};
+  var st=PHOTOS[curKey],i=DESIGN_SLOT,ph=st[i];
+  $("#mPhotos").classList.add("single");
+  if(ph&&ph.url)$("#mPhotos").innerHTML='<div class="ph up" data-i="'+i+'"><img src="'+ph.url+'"/><span class="rm" data-rm="'+i+'" title="Hapus foto">✕</span></div>';
+  else if(ph&&ph.id)$("#mPhotos").innerHTML='<div class="ph"><b>⏳ '+DESIGN_LABEL+'</b><span>memuat dari Drive…</span></div>';
+  else $("#mPhotos").innerHTML='<div class="ph up" data-i="'+i+'"><b>📐 '+DESIGN_LABEL+'</b><span>klik untuk upload gambar desain</span></div>';
+  if(ph&&ph.id&&!ph.url)loadOnePhoto(curKey,i);
 }
 function openDocProg(r){
   curKey=r.b;curMode="prog";
@@ -713,6 +737,20 @@ function openDocDone(r){
     b.disabled=false;b.textContent=old;
   };
 }
+/* Popup DESAIN — 1 gambar besar + data plan dari tab Survey */
+function openDesign(r){
+  curKey=r.b;curMode="design";
+  $("#mTitle").textContent="Desain Instalasi — "+r.b;
+  $("#mChips").innerHTML='<span class="badge '+bcls(r.stat)+'">'+r.stat+"</span>";
+  var s=surveyOf(r.b),pv=pvInfo(r.b);
+  var pic=(s&&s[5]&&s[5]!=="-")?s[5]:((r.pic&&r.pic!=="-")?r.pic:"-");
+  $("#mBody").innerHTML="PIC: <b>"+esc(pic)+"</b>"+
+    (pv?' &nbsp;<span class="pvinfo">☀️ Plan PV: <b>'+pv.pv+' panel</b> ≈ <b>'+pv.kwp+' kWp</b></span>':'')+
+    ' &nbsp;<span class="pvinfo" style="background:#fefce8;border-color:#fde047;color:#a16207">🔌 Tapping Load: <b>'+esc((s&&s[10])||"-")+"</b></span>";
+  renderDesignSlot();
+  $("#mActions").innerHTML='<a class="btn ghost" href="#" onclick="alert(\'Placeholder — ganti dengan link folder Google Drive site ini.\');return false">📂 Folder Google Drive</a>';
+  $("#modal").classList.add("show");
+}
 $("#mPhotos").addEventListener("click",function(e){
   var rm=e.target.getAttribute("data-rm");
   if(rm!==null){
@@ -724,7 +762,7 @@ $("#mPhotos").addEventListener("click",function(e){
         .catch(function(){toast("⚠️ Gagal menghubungi server untuk hapus foto");});
     }
     if(PHOTOS[curKey])delete PHOTOS[curKey][rm];
-    renderPhotoSlots();
+    refreshPhotoView();
     return;
   }
   var slotEl=e.target.closest(".ph.up");if(!slotEl)return;
@@ -737,7 +775,7 @@ $("#mPhotos").addEventListener("click",function(e){
 function openLightbox(i){
   var ph=PHOTOS[curKey][i];
   $("#lbImg").src=ph.url;
-  $("#lbCap").textContent=PHOTO_LABELS[i]+" — "+curKey;
+  $("#lbCap").textContent=slotLabel(i)+" — "+curKey;
   $("#lightbox").classList.add("show");
 }
 $("#lightbox").addEventListener("click",function(){$(this).classList.remove("show");});
@@ -748,8 +786,8 @@ $("#fileIn").addEventListener("change",function(){
   fileToJpeg(f,1600,function(dataUrl,w,h){
     if(!PHOTOS[branch])PHOTOS[branch]={};
     PHOTOS[branch][slot]={url:dataUrl,w:w,h:h};
-    if(curKey===branch)renderPhotoSlots();
-    apiPost({action:"uploadPhoto",branch:branch,slot:slot,label:PHOTO_LABELS[slot]||"",dataUrl:dataUrl})
+    if(curKey===branch)refreshPhotoView();
+    apiPost({action:"uploadPhoto",branch:branch,slot:slot,label:slotLabel(slot)||"",dataUrl:dataUrl})
     .then(function(j){
       if(!j||!j.ok)throw new Error((j&&j.error)||"Upload gagal");
       if(PHOTOS[branch]&&PHOTOS[branch][slot])PHOTOS[branch][slot].id=j.id;
@@ -757,7 +795,7 @@ $("#fileIn").addEventListener("change",function(){
     })
     .catch(function(err){
       if(PHOTOS[branch])delete PHOTOS[branch][slot];
-      if(curKey===branch)renderPhotoSlots();
+      if(curKey===branch)refreshPhotoView();
       alert("Gagal upload foto ke Drive:\n"+err.message);
     });
   });
@@ -906,6 +944,30 @@ async function genPDF(r){
     doc.setTextColor(20);doc.text(String(x[1]),M+38,y);y+=5.6;
   });
   y+=3;
+  /* ---- Desain Instalasi (Plan) — data dari tab Survey + gambar slot Desain ---- */
+  var sD=surveyOf(r.b),pvD=pvInfo(r.b),dph=(PHOTOS[r.b]||{})[DESIGN_SLOT];
+  if(sD||pvD||(dph&&dph.id)){
+    doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(12,35,64);
+    doc.text("Desain Instalasi (Plan)",M,y);y+=5.5;
+    doc.setFont("helvetica","normal");doc.setFontSize(9.5);doc.setTextColor(70);
+    var picD=(sD&&sD[5]&&sD[5]!=="-")?sD[5]:(r.inst||"-");
+    doc.text("PIC: "+picD,M,y);y+=5;
+    if(pvD){doc.text("Plan PV: "+pvD.pv+" panel  =  "+pvD.kwp+" kWp",M,y);y+=5;}
+    doc.text("Tapping Load: "+((sD&&sD[10])||"-"),M,y);y+=4;
+    var dH=72;
+    if(y+dH+6>pw-14){doc.addPage();y=18;}
+    if(dph&&dph.url&&dph.w){
+      var dw=W-M*2,ih=dw*dph.h/dph.w,iw=dw;
+      if(ih>dH){ih=dH;iw=dH*dph.w/dph.h;}
+      var ix=M+(dw-iw)/2;
+      try{doc.addImage(dph.url,dph.url.indexOf("image/png")>-1?"PNG":"JPEG",ix,y+2,iw,ih);}catch(err){}
+      doc.setDrawColor(180);doc.setLineWidth(0.3);doc.rect(M,y+2,dw,dH);
+    }else{
+      doc.setTextColor(140);doc.setFontSize(8.5);
+      doc.text("(belum ada gambar desain diupload)",M,y+6);
+    }
+    y+=dH+8;doc.setTextColor(30);
+  }
   doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(12,35,64);
   doc.text("Dokumentasi Foto",M,y);y+=2;
   var fw=(W-M*2-8)/2,fh=52;
@@ -1074,12 +1136,15 @@ function renderProg(){
     "<td>"+r.no+"</td><td><b>"+esc(r.b)+"</b></td><td><span class=\"badge "+(r.reg==="JATIM"?"b-done":"b-prep")+"\">"+r.reg+"</span></td><td>"+esc(r.pic)+"</td>"+
     r.st.split("").map(function(c){return "<td>"+chip(c)+"</td>";}).join("")+
     "<td>"+bar(r.p)+"</td><td><span class=\"badge "+bcls(r.stat)+"\">"+r.stat+"</span></td>"+
+    "<td><button class=\"btn sm dsn\" data-i=\""+i+"\">📐</button></td>"+
     "<td><button class=\"btn sm doc\" data-i=\""+i+"\">📷</button></td>"+
     "<td><button class=\"btn sm ed\" data-i=\""+i+"\">✏️</button></td></tr>";}).join("");
-  $("#tProg tbody").innerHTML=html||'<tr><td colspan="16" style="text-align:center;color:var(--muted)">Tidak ada data</td></tr>';
+  $("#tProg tbody").innerHTML=html||'<tr><td colspan="17" style="text-align:center;color:var(--muted)">Tidak ada data</td></tr>';
 }
 $("#fProgReg").onchange=renderProg;$("#qProg").oninput=renderProg;
 $("#tProg").addEventListener("click",function(e){
+  var ds=e.target.closest("button.dsn");
+  if(ds){var r0=curProgRows[+ds.dataset.i];if(r0)openDesign(r0);return;}
   var d=e.target.closest("button.doc");
   if(d){var r1=curProgRows[+d.dataset.i];if(r1)openDocProg(r1);return;}
   var ed=e.target.closest("button.ed");
